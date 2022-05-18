@@ -16,4 +16,4 @@ COPY mirror.sh /usr/src/app
 
 USER 1001
 
-CMD bash mirror.sh
+CMD ./mirror.sh
