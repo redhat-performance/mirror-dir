@@ -13,6 +13,18 @@ type -p find >/dev/null || exit 1
 [[ -z $STORAGE_DIR ]] && exit 1
 [[ ! -d $STORAGE_DIR ]] && exit 1
 
+if [[ $SKIP_AGE_CHECK == 'true' ]]; then
+    log "Not checking when last backup happened"
+else
+    log "Checking when last backup happened"
+    newest_file="$( ls -At1 $STORAGE_DIR/*.log | head -n 1 )"
+    newest_file_age_days=$(( ($( date --utc +%s ) - $( date --utc +%s -r $newest_file )) / (36*24) ))
+    if [[ $newest_file_age_days -lt 6 ]]; then
+        log "Newest log file $newest_file is only $newest_file_age_days days old, so skipping backup"
+        exit 0
+    fi
+fi
+
 MARKER="$( date --utc -Iseconds | sed 's/[^0-9a-zA-Z_-]/_/g' )"
 TARGET_DIR="$STORAGE_DIR/$MARKER"
 log "Target directory to mirror to: $TARGET_DIR"
