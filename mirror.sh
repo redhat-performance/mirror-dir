@@ -23,7 +23,7 @@ for HTTP_DIR in $HTTP_DIRS; do
     mkdir "$TARGET_DIR"
 
     echo "DEBUG: Mirroring"
-    wget --recursive --level 10 -e robots=off --no-parent --directory-prefix "$TARGET_DIR" "$HTTP_DIR" &>"$STORAGE_DIR/mirroring-$MARKER.log"
+    wget --recursive --level 10 --no-verbose -e robots=off --no-parent --directory-prefix "$TARGET_DIR" "$HTTP_DIR" &>"$STORAGE_DIR/mirroring-$MARKER.log"
 done
 
 echo "DEBUG: Deduplicating"
