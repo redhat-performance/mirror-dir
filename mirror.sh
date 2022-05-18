@@ -28,6 +28,9 @@ for HTTP_DIR in $HTTP_DIRS; do
 
     log "Mirroring"
     wget --recursive --level 10 --no-verbose -e robots=off --no-parent --directory-prefix "$TARGET_DIR" "$HTTP_DIR" &>"$STORAGE_DIR/mirroring-$MARKER.log"
+
+    log "Removing index.html files"
+    find "$TARGET_DIR" -type f -name 'index.html*' -delete
 done
 
 log "Deduplicating"
