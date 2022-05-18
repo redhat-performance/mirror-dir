@@ -1,5 +1,9 @@
 #!/bin/bash
 
+function log() {
+    echo "$( date --utc -Iseconds ) LOG: $@" >&2
+}
+
 set -e
 
 type -p wget || exit 1
@@ -11,24 +15,26 @@ type -p find || exit 1
 
 MARKER="$( date --utc -Iseconds | sed 's/[^0-9a-zA-Z_-]/_/g' )"
 TARGET_DIR="$STORAGE_DIR/$MARKER"
-echo "INFO: Target directory to mirror to: $TARGET_DIR"
+log "Target directory to mirror to: $TARGET_DIR"
 
 for HTTP_DIR in $HTTP_DIRS; do
     [[ -z $HTTP_DIR ]] && continue
     [[ $HTTP_DIR != http* ]] && continue
 
-    echo "INFO: HTTP directory to mirror: $HTTP_DIR"
+    log "HTTP directory to mirror: $HTTP_DIR"
 
-    echo "DEBUG: Creating target directory"
+    log "Creating target directory"
     mkdir "$TARGET_DIR"
 
-    echo "DEBUG: Mirroring"
+    log "Mirroring"
     wget --recursive --level 10 --no-verbose -e robots=off --no-parent --directory-prefix "$TARGET_DIR" "$HTTP_DIR" &>"$STORAGE_DIR/mirroring-$MARKER.log"
 done
 
-echo "DEBUG: Deduplicating"
+log "Deduplicating"
 rdfind -makehardlinks true -removeidentinode true "$STORAGE_DIR" &>"$STORAGE_DIR/deduplication-$MARKER.log"
 
-echo "DEBUG: Pruning"
+log "Pruning"
 find "$STORAGE_DIR" -type f -mtime +365 -delete
 find "$STORAGE_DIR" -type d -empty -delete
+
+log "Done"
