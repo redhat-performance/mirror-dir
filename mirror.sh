@@ -13,7 +13,7 @@ MARKER="$( date --utc -Iseconds | sed 's/[^0-9a-zA-Z_-]/_/g' )"
 TARGET_DIR="$STORAGE_DIR/$MARKER"
 echo "INFO: Target directory to mirror to: $TARGET_DIR"
 
-for HTTP_DIR in "$HTTP_DIRS"; do
+for HTTP_DIR in $HTTP_DIRS; do
     [[ -z $HTTP_DIR ]] && continue
     [[ $HTTP_DIR != http* ]] && continue
 
