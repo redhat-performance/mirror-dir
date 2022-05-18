@@ -6,9 +6,9 @@ function log() {
 
 set -e
 
-type -p wget || exit 1
-type -p rdfind || exit 1
-type -p find || exit 1
+type -p wget >/dev/null || exit 1
+type -p rdfind >/dev/null || exit 1
+type -p find >/dev/null || exit 1
 
 [[ -z $STORAGE_DIR ]] && exit 1
 [[ ! -d $STORAGE_DIR ]] && exit 1
