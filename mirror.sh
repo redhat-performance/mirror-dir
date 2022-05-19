@@ -18,7 +18,7 @@ if [[ $SKIP_AGE_CHECK == 'true' ]]; then
 else
     log "Checking when last backup happened"
     newest_file="$( ls -At1 $STORAGE_DIR/*.log | head -n 1 )"
-    newest_file_age_days=$(( ($( date --utc +%s ) - $( date --utc +%s -r $newest_file )) / (36*24) ))
+    newest_file_age_days=$(( ($( date --utc +%s ) - $( date --utc +%s -r $newest_file )) / (3600*24) ))
     if [[ $newest_file_age_days -lt 6 ]]; then
         log "Newest log file $newest_file is only $newest_file_age_days days old, so skipping backup"
         exit 0
